@@ -1,11 +1,14 @@
-// 支撑
-function getPosTop(i,j){
-  return 20+i*120;
-}
-function getPosLeft(i,j){
-  return 20+j*120;
+// 支撑函数
+
+function getPosTop( i , j ){
+    return 20 + i*120;
 }
 
+function getPosLeft( i , j ){
+    return 20 + j*120;
+}
+
+//获取每个空格的背景颜色
 function getNumberBackgroundColor(number){
   switch(number){
     case 2:return "#eee4da";break;
@@ -25,9 +28,21 @@ function getNumberBackgroundColor(number){
   return "black";
 }
 
+//获取每个数字的颜色
 function getNumberColor(number){
   if(number<=4){
     return "#776e65";
   }
   return "white";
+}
+
+//判断棋盘是否还有空间 用于生成随机数字
+function nospace(board){
+  for(var i=0;i<4;i++){
+    for(var j=0;j<4;j++){
+      if(board[i][j]==0)
+        return false;
+    }
+  }
+  return true;  
 }
