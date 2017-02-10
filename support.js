@@ -1,11 +1,20 @@
 // 支撑函数
 
+//获取当前屏幕可用尺寸
+documentWidth=window.screen.availWidth;
+//游戏面板宽度
+gridContainerWidth=0.92*documentWidth;
+//每个小方块边长
+cellSideLength=0.18*documentWidth;
+//每一个小方块间距
+cellSpace=0.04*documentWidth;
+
 function getPosTop( i , j ){
-    return 20 + i*120;
+    return cellSpace + i*(cellSpace+cellSideLength);
 }
 
 function getPosLeft( i , j ){
-    return 20 + j*120;
+    return cellSpace + j*(cellSpace+cellSideLength);
 }
 
 //获取每个空格的背景颜色
@@ -44,5 +53,83 @@ function nospace(board){
         return false;
     }
   }
-  return true;  
+  return true;
+}
+
+//判断当前局势是否能向左移
+//1.左边是否没有数字
+//2.左边数字是否和自己相同 可以合并
+function canMoveLeft(board){
+  for(var i=0;i<4;i++){
+    //j从1开始 因为只用考虑右边的3列
+    for(var j=1;j<4;j++){
+      if(board[i][j]!=0){
+        if(board[i][j-1]==0||board[i][j-1]==board[i][j])
+          return true;
+      }
+    }
+  }
+  return false;
+}
+
+function canMoveUp(board){
+  for(var i=1;i<4;i++){
+    for(var j=0;j<4;j++){
+      if(board[i][j]!=0){
+        if(board[i-1][j]==0||board[i-1][j]==board[i][j])
+          return true;
+      }
+    }
+  }
+  return false;
+}
+
+function canMoveRight(board){
+  for(var i=0;i<4;i++){
+    for(var j=2;j>=0;j--){
+      if(board[i][j]!=0){
+        if(board[i][j+1]==0||board[i][j+1]==board[i][j])
+          return true;
+      }
+    }
+  }
+  return false;
+}
+
+function canMoveDown(board){
+  for(var j=0;j<4;j++){
+    for(var i=2;i>=0;i--){
+      if(board[i][j]!=0){
+        if(board[i+1][j]==0||board[i+1][j]==board[i][j])
+          return true;
+      }
+    }
+  }
+  return false;
+}
+
+
+//判断移动路径是否有障碍物
+function noBlockHorizontal(row,col1,col2,board){
+  for(var i=col1+1;i<col2;i++){
+    //在移动的过程中如果有一处不为空 则返回false
+    if(board[row][i]!=0)
+      return false;
+  }
+  return true;
+}
+
+function noBlockVertical(col,row1,row2,board){
+  for(var i=row1+1;i<row2;i++){
+    if(board[i][col]!=0)
+      return false;
+  }
+  return true;
+}
+
+//判断是否可以移动 即调用4个已写好的canMove--函数
+function nomove(){
+  if(canMoveDown(board)||canMoveLeft(board)||canMoveRight(board)||canMoveUp(board))
+    return false;
+  return true;
 }
